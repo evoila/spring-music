@@ -3,6 +3,7 @@ package org.cloudfoundry.samples.music.repositories;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cloudfoundry.samples.music.domain.Album;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -11,7 +12,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.init.Jackson2ResourceReader;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class AlbumRepositoryPopulator implements ApplicationListener<ApplicationReadyEvent> {
     private final Jackson2ResourceReader resourceReader;
@@ -24,13 +27,23 @@ public class AlbumRepositoryPopulator implements ApplicationListener<Application
         sourceData = new ClassPathResource("albums.json");
     }
 
+
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        CrudRepository albumRepository =
-                BeanFactoryUtils.beanOfTypeIncludingAncestors(event.getApplicationContext(), CrudRepository.class);
 
-        if (albumRepository != null && albumRepository.count() == 0) {
-            populate(albumRepository);
+        String[] profilesArray = event.getApplicationContext().getEnvironment().getActiveProfiles();
+        List profiles = Arrays.asList(profilesArray);
+
+
+        if (profiles.contains("rabbitmq")) {
+            BeanFactoryUtils.beanOfTypeIncludingAncestors(event.getApplicationContext(), RabbitTemplate.class);
+        } else {
+            CrudRepository albumRepository =
+                    BeanFactoryUtils.beanOfTypeIncludingAncestors(event.getApplicationContext(), CrudRepository.class);
+
+            if (albumRepository != null && albumRepository.count() == 0) {
+                populate(albumRepository);
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package org.cloudfoundry.samples.music.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
@@ -12,15 +13,11 @@ import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;
 import org.springframework.cloud.CloudFactory;
 import org.springframework.cloud.service.ServiceInfo;
-import org.springframework.cloud.service.common.MongoServiceInfo;
-import org.springframework.cloud.service.common.MysqlServiceInfo;
-import org.springframework.cloud.service.common.OracleServiceInfo;
-import org.springframework.cloud.service.common.PostgresqlServiceInfo;
-import org.springframework.cloud.service.common.RedisServiceInfo;
-import org.springframework.cloud.service.common.SqlServerServiceInfo;
+import org.springframework.cloud.service.common.*;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
 import org.springframework.util.StringUtils;
@@ -40,7 +37,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
     private static final Map<Class<? extends ServiceInfo>, String> serviceTypeToProfileName = new HashMap<>();
     private static final List<String> validLocalProfiles =
-            Arrays.asList("mysql", "postgres", "sqlserver", "oracle", "mongodb", "redis");
+            Arrays.asList("mysql", "postgres", "sqlserver", "oracle", "mongodb", "redis", "rabbitmq");
 
     static {
         serviceTypeToProfileName.put(MongoServiceInfo.class, "mongodb");
@@ -49,6 +46,8 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         serviceTypeToProfileName.put(RedisServiceInfo.class, "redis");
         serviceTypeToProfileName.put(OracleServiceInfo.class, "oracle");
         serviceTypeToProfileName.put(SqlServerServiceInfo.class, "sqlserver");
+        serviceTypeToProfileName.put(AmqpServiceInfo.class, "rabbitmq");
+
     }
 
     @Override
@@ -122,12 +121,19 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         if (environment.acceptsProfiles("redis")) {
             excludeDataSourceAutoConfiguration(exclude);
             excludeMongoAutoConfiguration(exclude);
+            excludeRabbitAutoConfiguration(exclude);
         } else if (environment.acceptsProfiles("mongodb")) {
             excludeDataSourceAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
+            excludeRabbitAutoConfiguration(exclude);
+        } else if (environment.acceptsProfiles("rabbitmq")) {
+            excludeMongoAutoConfiguration(exclude);
+            excludeRedisAutoConfiguration(exclude);
+            excludeDataSourceAutoConfiguration(exclude);
         } else {
             excludeMongoAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
+            excludeRabbitAutoConfiguration(exclude);
         }
 
         Map<String, Object> properties = Collections.singletonMap("spring.autoconfigure.exclude",
@@ -154,6 +160,12 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         exclude.addAll(Arrays.asList(
                 RedisAutoConfiguration.class.getName(),
                 RedisRepositoriesAutoConfiguration.class.getName()
+        ));
+    }
+
+    private void excludeRabbitAutoConfiguration(List<String> exclude) {
+        exclude.addAll(Arrays.asList(
+                RabbitAutoConfiguration.class.getName()
         ));
     }
 }

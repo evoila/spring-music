@@ -33,3 +33,15 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.ProgressDialect
+
+---
+spring:
+  profiles: rabbitmq
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    javainuse.rabbitmq.exchange: javainuse.exchange
+    javainuse.rabbitmq.queue: javainuse.queue
+    javainuse.rabbitmq.routingkey: javainuse.routingkey
