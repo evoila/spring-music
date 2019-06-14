@@ -7,6 +7,7 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
+import org.cloudfoundry.samples.music.config.data.RabbitmqConfig;
 import org.cloudfoundry.samples.music.model.RabbitMQSender;
 import org.dom4j.io.SAXEventRecorder;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;
 import org.springframework.cloud.CloudFactory;
 import org.springframework.cloud.service.ServiceInfo;
+import org.springframework.cloud.service.common.AmqpServiceInfo;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -35,8 +37,8 @@ import java.util.List;
 @RequestMapping(value = "/rabbitmq")
 public class RabbitmqController {
 
-    private static final String HTTP = "http";
-    private static final String HTTPS = "https";
+    private static final String HTTP = "http://";
+    private static final String HTTPS = "https://";
     private static final Logger logger = LoggerFactory.getLogger(RabbitmqController.class);
 
     RabbitMQSender rabbitMQSender;
@@ -45,7 +47,6 @@ public class RabbitmqController {
     public void setRabbitMQSender(RabbitMQSender rabbitMQSender){
         this.rabbitMQSender = rabbitMQSender;
     }
-
 
     @PutMapping(value = "/send")
     public String producer(@RequestParam("message") String msg) {
@@ -58,20 +59,33 @@ public class RabbitmqController {
     public ResponseEntity<String> getUserInfo() {
 
         Cloud cloud = getCloud();
-        List<ServiceInfo> serviceInfos = cloud.getServiceInfos();
+        AmqpServiceInfo serviceInfo = null;
+        List<ServiceInfo> generalServiceInfo = cloud.getServiceInfos();
+        if (generalServiceInfo.get(0) instanceof AmqpServiceInfo) {
+            serviceInfo = (AmqpServiceInfo) generalServiceInfo.get(0);
+        }
+        HttpMethod method = HttpMethod.GET;
+        boolean tlsEnabled = false;
 
-        serviceInfos.forEach(serviceInfo -> logger.info(serviceInfo.toString()));
 
         //TODO
-        // implement Rest Template
+        // refactor this code
+        String baseUrl;
+        int port;
+        if (tlsEnabled) {
+            baseUrl = HTTPS;
+            port = 15671;
+        } else {
+            baseUrl = HTTP;
+            port = 15672;
+        }
 
-        /*boolean tlsEnabled = false;
-        HttpMethod method = HttpMethod.GET;
-        String baseUrl = ""; // get from env
+        String username = serviceInfo.getUserName();
+        String password = serviceInfo.getPassword();
+
+
         String endpoint = "/api/whoami";
-        String url = baseUrl + endpoint;
-        String username = "";
-        String password = "";
+        String url = baseUrl + username + ":" + password + "@" + serviceInfo.getHost() + ":" + port + endpoint;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", buildAuthHeader(username, password));
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -106,9 +120,8 @@ public class RabbitmqController {
 
         logger.info(responseEntity.getBody());
 
-        return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.CREATED);
-    */
-        return null;
+        return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
+
     }
 
     private String buildAuthHeader(String username, String password) {
