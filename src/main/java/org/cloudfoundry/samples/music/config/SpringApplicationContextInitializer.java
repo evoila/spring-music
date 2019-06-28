@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;
 import org.springframework.cloud.CloudFactory;
+import org.springframework.cloud.service.BaseServiceInfo;
 import org.springframework.cloud.service.ServiceInfo;
 import org.springframework.cloud.service.common.*;
 import org.springframework.context.ApplicationContextInitializer;
@@ -46,6 +47,10 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         serviceTypeToProfileName.put(OracleServiceInfo.class, "oracle");
         serviceTypeToProfileName.put(SqlServerServiceInfo.class, "sqlserver");
         serviceTypeToProfileName.put(AmqpServiceInfo.class, "rabbitmq");
+        //serviceTypeToProfileName.put(BaseServiceInfo.class, "elasticsearch");
+        //serviceTypeToProfileName.put(CassandraServiceInfo.class, "cassandra");
+
+
 
     }
 

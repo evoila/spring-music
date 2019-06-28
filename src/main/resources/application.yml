@@ -45,3 +45,4 @@ spring:
     javainuse.rabbitmq.exchange: javainuse.exchange
     javainuse.rabbitmq.queue: javainuse.queue
     javainuse.rabbitmq.routingkey: javainuse.routingkey
+

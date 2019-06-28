@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music.web;
+package org.cloudfoundry.samples.music.web.rabbitmq;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.client.HttpClient;
@@ -7,9 +7,7 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
-import org.cloudfoundry.samples.music.config.data.RabbitmqConfig;
 import org.cloudfoundry.samples.music.model.RabbitMQSender;
-import org.dom4j.io.SAXEventRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

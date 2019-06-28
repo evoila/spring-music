@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music.web;
+package org.cloudfoundry.samples.music.web.databases;
 
 import org.cloudfoundry.samples.music.domain.Album;
 import org.slf4j.Logger;
