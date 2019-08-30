@@ -63,7 +63,7 @@ public class RabbitmqController {
             serviceInfo = (AmqpServiceInfo) generalServiceInfo.get(0);
         }
         HttpMethod method = HttpMethod.GET;
-        boolean tlsEnabled = false;
+        boolean tlsEnabled = true;
 
 
         //TODO

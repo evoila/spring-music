@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.1.RELEASE'
-        springCloudConnectorsVersion = '2.0.1.RELEASE'
+        springBootVersion = '2.1.7.RELEASE'
+        springCloudConnectorsVersion = '2.1.7.RELEASE'
     }
 
     repositories {
@@ -61,8 +61,8 @@ dependencies {
     compile "org.webjars:jquery:2.1.0-2"
 
     // Oracle - uncomment one of the following after placing driver in ./libs
-    // compile files('libs/ojdbc8.jar')
-    // compile files('libs/ojdbc7.jar')
+    compile files('libs/ojdbc8.jar')
+    compile files('libs/ojdbc7.jar')
 
     // Testing
     testCompile "junit:junit"
