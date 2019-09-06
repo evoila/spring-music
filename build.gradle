@@ -46,12 +46,16 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-spring-service-connector:${springCloudConnectorsVersion}"
     compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector:${springCloudConnectorsVersion}"
 
+    compile('org.hibernate:hibernate-core:5.4.2.Final')
+
     // JPA Persistence
     runtime "org.apache.commons:commons-pool2:2.6.0"
     runtime "com.h2database:h2"
     runtime "mysql:mysql-connector-java"
     runtime "org.postgresql:postgresql"
     runtime "com.microsoft.sqlserver:mssql-jdbc"
+
+
 
     // Webjars
     compile "org.webjars:bootstrap:3.1.1"
