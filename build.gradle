@@ -60,6 +60,12 @@ dependencies {
     compile "org.webjars:angular-ui-bootstrap:0.10.0-1"
     compile "org.webjars:jquery:2.1.0-2"
 
+    // JAX-B dependencies for JDK 9+
+    implementation "javax.xml.bind:jaxb-api:2.2.11"
+    implementation "com.sun.xml.bind:jaxb-core:2.2.11"
+    implementation "com.sun.xml.bind:jaxb-impl:2.2.11"
+    implementation "javax.activation:activation:1.1.1"
+
     // Oracle - uncomment one of the following after placing driver in ./libs
     compile files('libs/ojdbc8.jar')
     compile files('libs/ojdbc7.jar')
