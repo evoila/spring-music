@@ -66,7 +66,7 @@ dependencies {
     compile "org.webjars:jquery:2.1.0-2"
 
     // JAX-B dependencies for JDK 9+
-    implementation "javax.xml.bind:jaxb-api:2.2.11"
+    implementation "javax.xml.bind:jaxb-api:2.3.0"
     implementation "com.sun.xml.bind:jaxb-core:2.2.11"
     implementation "com.sun.xml.bind:jaxb-impl:2.2.11"
     implementation "javax.activation:activation:1.1.1"
