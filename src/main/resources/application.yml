@@ -46,3 +46,12 @@ spring:
     javainuse.rabbitmq.queue: javainuse.queue
     javainuse.rabbitmq.routingkey: javainuse.routingkey
 
+
+
+---
+spring:
+  data:
+    cassandra:
+      port: 9042
+      contact-points: 127.0.0.1
+      keyspace: testSpringMusic

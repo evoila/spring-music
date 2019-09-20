@@ -1,25 +1,33 @@
 package org.cloudfoundry.samples.music.domain;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
+import org.springframework.data.cassandra.core.mapping.Table;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.UUID;
 
+@Table
 @Entity
 public class Album {
+
     @Id
+    @PrimaryKey
     @Column(length=40)
-    @GeneratedValue(generator="randomId")
-    @GenericGenerator(name="randomId", strategy="org.cloudfoundry.samples.music.domain.RandomIdGenerator")
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
     private String title;
+
     private String artist;
+
     private String releaseYear;
+
     private String genre;
+
     private int trackCount;
+
     private String albumId;
 
     public Album() {

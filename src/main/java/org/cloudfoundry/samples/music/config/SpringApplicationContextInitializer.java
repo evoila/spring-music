@@ -3,6 +3,9 @@ package org.cloudfoundry.samples.music.config;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
+import org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.cassandra.CassandraRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
@@ -37,7 +40,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
     private static final Map<Class<? extends ServiceInfo>, String> serviceTypeToProfileName = new HashMap<>();
     private static final List<String> validLocalProfiles =
-            Arrays.asList("mysql", "postgres", "sqlserver", "oracle", "mongodb", "redis", "rabbitmq");
+            Arrays.asList("mysql", "postgres", "sqlserver", "oracle", "mongodb", "redis", "rabbitmq", "cassandra");
 
     static {
         serviceTypeToProfileName.put(MongoServiceInfo.class, "mongodb");
@@ -48,7 +51,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         serviceTypeToProfileName.put(SqlServerServiceInfo.class, "sqlserver");
         serviceTypeToProfileName.put(AmqpServiceInfo.class, "rabbitmq");
         //serviceTypeToProfileName.put(BaseServiceInfo.class, "elasticsearch");
-        //serviceTypeToProfileName.put(CassandraServiceInfo.class, "cassandra");
+        serviceTypeToProfileName.put(CassandraServiceInfo.class, "cassandra");
 
 
 
@@ -126,18 +129,27 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
             excludeDataSourceAutoConfiguration(exclude);
             excludeMongoAutoConfiguration(exclude);
             excludeRabbitAutoConfiguration(exclude);
+            excludeCassndraAutoConfiguration(exclude);
         } else if (environment.acceptsProfiles("mongodb")) {
             excludeDataSourceAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
             excludeRabbitAutoConfiguration(exclude);
+            excludeCassndraAutoConfiguration(exclude);
         } else if (environment.acceptsProfiles("rabbitmq")) {
             excludeMongoAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
             excludeDataSourceAutoConfiguration(exclude);
+            excludeCassndraAutoConfiguration(exclude);
+        } else if (environment.acceptsProfiles("cassandra")) {
+            excludeMongoAutoConfiguration(exclude);
+            excludeRedisAutoConfiguration(exclude);
+            excludeDataSourceAutoConfiguration(exclude);
+            excludeRabbitAutoConfiguration(exclude);
         } else {
             excludeMongoAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
             excludeRabbitAutoConfiguration(exclude);
+            excludeCassndraAutoConfiguration(exclude);
         }
 
         Map<String, Object> properties = Collections.singletonMap("spring.autoconfigure.exclude",
@@ -170,6 +182,14 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
     private void excludeRabbitAutoConfiguration(List<String> exclude) {
         exclude.addAll(Arrays.asList(
                 RabbitAutoConfiguration.class.getName()
+        ));
+    }
+
+    private void excludeCassndraAutoConfiguration(List<String> exclude) {
+        exclude.addAll(Arrays.asList(
+                CassandraAutoConfiguration.class.getName(),
+                CassandraDataAutoConfiguration.class.getName(),
+                CassandraRepositoriesAutoConfiguration.class.getName()
         ));
     }
 }

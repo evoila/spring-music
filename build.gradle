@@ -41,6 +41,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
     compile "org.springframework.boot:spring-boot-starter-data-redis"
     compile "org.springframework.boot:spring-boot-starter-amqp"
+    compile('org.springframework.boot:spring-boot-starter-data-cassandra')
 
     // Spring Cloud Connectors
     compile "org.springframework.cloud:spring-cloud-spring-service-connector:${springCloudConnectorsVersion}"

@@ -34,13 +34,18 @@ public class AlbumRepositoryPopulator implements ApplicationListener<Application
         String[] profilesArray = event.getApplicationContext().getEnvironment().getActiveProfiles();
         List profiles = Arrays.asList(profilesArray);
 
-
+        CrudRepository albumRepository;
         if (profiles.contains("rabbitmq")) {
             BeanFactoryUtils.beanOfTypeIncludingAncestors(event.getApplicationContext(), RabbitTemplate.class);
+        }else if (profiles.contains("cassandra")) {
+            albumRepository =
+                    BeanFactoryUtils.beanOfType(event.getApplicationContext(), CrudRepository.class);
+            if (albumRepository != null && albumRepository.count() == 0) {
+                populate(albumRepository);
+            }
         } else {
-            CrudRepository albumRepository =
+            albumRepository =
                     BeanFactoryUtils.beanOfTypeIncludingAncestors(event.getApplicationContext(), CrudRepository.class);
-
             if (albumRepository != null && albumRepository.count() == 0) {
                 populate(albumRepository);
             }

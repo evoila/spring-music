@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Profile({"!mongodb", "!redis"})
+@Profile({"postgres", "mysql", "oracle"})
 public interface JpaAlbumRepository extends JpaRepository<Album, String> {
 }

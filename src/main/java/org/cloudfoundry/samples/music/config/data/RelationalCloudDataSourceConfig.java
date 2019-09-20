@@ -15,5 +15,4 @@ public class RelationalCloudDataSourceConfig extends AbstractCloudConfig {
     public DataSource dataSource() {
         return connectionFactory().dataSource();
     }
-
 }
