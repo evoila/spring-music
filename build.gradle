@@ -76,7 +76,7 @@ dependencies {
     //compile files('libs/ojdbc8.jar')
     //compile files('libs/ojdbc7.jar')
 
-    compile group: 'com.oracle.jdbc', name: 'ojdbc8', version: '12.2.0.1'
+    compile group: 'com.github.noraui', name: 'ojdbc8', version: '12.2.0.1'
 
     // Testing
     testCompile "junit:junit"
