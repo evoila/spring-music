@@ -2,6 +2,7 @@ package org.cloudfoundry.samples.music.config.data;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +11,7 @@ import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.SchemaAction;
 
-
-@ConfigurationProperties("vcap.services.sm-cass.credentials")
+@ConfigurationProperties
 @Configuration
 @Profile({"cassandra-cloud", "cassandra"})
 public class CassandraConfig extends AbstractCassandraConfiguration {
@@ -19,9 +19,17 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     private static final Log logger = LogFactory.getLog(CassandraConfig.class);
 
     private String keyspace;
+
+    @Value("${vcap.services.${instance-name}.credentials.user}")
     private String user;
+
+    @Value("${vcap.services.${instance-name}.credentials.password}")
     private String password;
+
+    @Value("${vcap.services.${instance-name}.credentials.database}")
     private String database;
+
+    @Value("${vcap.services.${instance-name}.credentials.uri}")
     private String uri;
     /*
      * Provide a contact point to the configuration.
@@ -73,16 +81,16 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 
     /** Uncomment this method if you test the application in a new Env such as
      * a Docker Container. This will create a KeySpace if it does not exist.
-    @Override
-    protected List<String> getStartupScripts() {
-        List<String> createKeySpace = new ArrayList<>();
-        createKeySpace.add("CREATE KEYSPACE IF NOT EXISTS  "+ getKeyspaceName() +"  WITH replication = {"
-                + " 'class': 'SimpleStrategy', "
-                + " 'replication_factor': '1' "
-                + "};");
-        return createKeySpace;
-    }
-    */
+     @Override
+     protected List<String> getStartupScripts() {
+     List<String> createKeySpace = new ArrayList<>();
+     createKeySpace.add("CREATE KEYSPACE IF NOT EXISTS  "+ getKeyspaceName() +"  WITH replication = {"
+     + " 'class': 'SimpleStrategy', "
+     + " 'replication_factor': '1' "
+     + "};");
+     return createKeySpace;
+     }
+     */
 
     /*
      * Used to scan over classes and look for a class @Table
