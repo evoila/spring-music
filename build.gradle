@@ -42,7 +42,8 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-redis"
     compile "org.springframework.boot:spring-boot-starter-amqp"
     compile('org.springframework.boot:spring-boot-starter-data-cassandra')
-
+    compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
+    
     // Spring Cloud Connectors
     compile "org.springframework.cloud:spring-cloud-spring-service-connector:${springCloudConnectorsVersion}"
     compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector:${springCloudConnectorsVersion}"
@@ -72,8 +73,10 @@ dependencies {
     implementation "javax.activation:activation:1.1.1"
 
     // Oracle - uncomment one of the following after placing driver in ./libs
-    compile files('libs/ojdbc8.jar')
-    compile files('libs/ojdbc7.jar')
+    //compile files('libs/ojdbc8.jar')
+    //compile files('libs/ojdbc7.jar')
+
+    compile group: 'com.oracle.jdbc', name: 'ojdbc8', version: '12.2.0.1'
 
     // Testing
     testCompile "junit:junit"
