@@ -56,7 +56,6 @@ dependencies {
     runtime "mysql:mysql-connector-java"
     runtime "org.postgresql:postgresql"
     runtime "com.microsoft.sqlserver:mssql-jdbc"
-    runtime "com.github.noraui:ojdbc8:12.2.0.1"
 
     // Webjars
     compile "org.webjars:bootstrap:3.1.1"
@@ -64,6 +63,8 @@ dependencies {
     compile "org.webjars:angular-ui:0.4.0-2"
     compile "org.webjars:angular-ui-bootstrap:0.10.0-1"
     compile "org.webjars:jquery:2.1.0-2"
+
+    compile "com.github.noraui:ojdbc8:12.2.0.1"
 
     // JAX-B dependencies for JDK 9+
     implementation "javax.xml.bind:jaxb-api:2.3.0"
