@@ -65,8 +65,9 @@ dependencies {
     compile "org.webjars:angular-ui-bootstrap:0.10.0-1"
     compile "org.webjars:jquery:2.1.0-2"
 
-    compile "com.github.noraui:ojdbc8:12.2.0.1"
-
+    compile ('com.oracle.jdbc:ojdbc8:12.2.0.1') {
+        exclude group: 'com.oracle.jdbc'
+    }
     // JAX-B dependencies for JDK 9+
     implementation "javax.xml.bind:jaxb-api:2.3.0"
     implementation "com.sun.xml.bind:jaxb-core:2.2.11"
