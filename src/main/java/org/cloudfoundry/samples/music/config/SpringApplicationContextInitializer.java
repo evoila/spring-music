@@ -40,7 +40,8 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
     private static final Map<Class<? extends ServiceInfo>, String> serviceTypeToProfileName = new HashMap<>();
     private static final List<String> validLocalProfiles =
-            Arrays.asList("mysql", "postgres", "sqlserver", "oracle", "mongodb", "redis", "rabbitmq", "cassandra");
+            Arrays.asList("mysql", "postgres", "sqlserver", "oracle", "mongodb",
+                    "redis", "rabbitmq", "cassandra");
 
     static {
         serviceTypeToProfileName.put(MongoServiceInfo.class, "mongodb");
@@ -50,11 +51,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         serviceTypeToProfileName.put(OracleServiceInfo.class, "oracle");
         serviceTypeToProfileName.put(SqlServerServiceInfo.class, "sqlserver");
         serviceTypeToProfileName.put(AmqpServiceInfo.class, "rabbitmq");
-        //serviceTypeToProfileName.put(BaseServiceInfo.class, "elasticsearch");
         serviceTypeToProfileName.put(CassandraServiceInfo.class, "cassandra");
-
-
-
     }
 
     @Override
