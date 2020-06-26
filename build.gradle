@@ -43,9 +43,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-amqp"
     compile('org.springframework.boot:spring-boot-starter-data-cassandra')
     compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
-
-    // Postgresql
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
     
     // Spring Cloud Connectors
     compile "org.springframework.cloud:spring-cloud-spring-service-connector:${springCloudConnectorsVersion}"
