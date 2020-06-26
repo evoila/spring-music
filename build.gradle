@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.1.RELEASE'
-        springCloudConnectorsVersion = '2.0.2.RELEASE'
+        springBootVersion = '2.3.1.RELEASE'
+        springCloudConnectorsVersion = '2.0.7.RELEASE'
     }
 
     repositories {
@@ -43,6 +43,9 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-amqp"
     compile('org.springframework.boot:spring-boot-starter-data-cassandra')
     compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
+
+    // Postgresql
+    compile 'org.postgresql.postgresql:42.1.4'
     
     // Spring Cloud Connectors
     compile "org.springframework.cloud:spring-cloud-spring-service-connector:${springCloudConnectorsVersion}"
@@ -51,7 +54,7 @@ dependencies {
     compile('org.hibernate:hibernate-core:5.4.2.Final')
 
     // JPA Persistence
-    runtime "org.apache.commons:commons-pool2:2.6.0"
+    runtime "org.apache.commons:commons-pool2:2.8.0"
     runtime "com.h2database:h2"
     runtime "mysql:mysql-connector-java"
     runtime "org.postgresql:postgresql"
