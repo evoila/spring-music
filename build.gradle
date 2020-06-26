@@ -57,7 +57,7 @@ dependencies {
     runtime "org.apache.commons:commons-pool2:2.8.0"
     runtime "com.h2database:h2"
     runtime "mysql:mysql-connector-java"
-    runtime "org.postgresql:postgresql"
+    runtime "org.postgresql:postgresql:42.2.12"
     runtime "com.microsoft.sqlserver:mssql-jdbc"
 
     // Webjars
