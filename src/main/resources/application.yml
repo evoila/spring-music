@@ -45,3 +45,24 @@ spring:
     javainuse.rabbitmq.exchange: javainuse.exchange
     javainuse.rabbitmq.queue: javainuse.queue
     javainuse.rabbitmq.routingkey: javainuse.routingkey
+
+---
+spring:
+  profiles: elasticsearch
+  data:
+    elas
+
+elasticsearch:
+  host: localhost
+  port: 9200
+
+---
+spring:
+  profiles: mongodb
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: evoila
+      username: evoila
+      password: evoila
