@@ -1,11 +1,18 @@
 package org.cloudfoundry.samples.music.repositories.elasticsearch;
 
 import org.cloudfoundry.samples.music.domain.Album;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.query.Query;
+import org.springframework.data.elasticsearch.core.query.StringQuery;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -48,7 +55,10 @@ public class ElasticsearchAlbumRepository implements CrudRepository<Album, Strin
 
     @Override
     public Iterable<Album> findAll() {
-        return template.search(Query.findAll(), Album.class).map(SearchHit::getContent).toList();
+        StringQuery stringQuery = new StringQuery(QueryBuilders.matchAllQuery().toString());
+        stringQuery.setMaxResults((int) count());
+
+        return template.search(stringQuery, Album.class).map(SearchHit::getContent).toList();
     }
 
     @Override
@@ -80,4 +90,5 @@ public class ElasticsearchAlbumRepository implements CrudRepository<Album, Strin
     public void deleteAll() {
         deleteAll(findAll());
     }
+
 }
