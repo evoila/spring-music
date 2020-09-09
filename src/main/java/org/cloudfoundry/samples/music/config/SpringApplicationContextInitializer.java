@@ -2,6 +2,7 @@ package org.cloudfoundry.samples.music.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cloudfoundry.samples.music.config.data.ElasticSearchServiceInfo;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration;
@@ -52,6 +53,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         serviceTypeToProfileName.put(SqlServerServiceInfo.class, "sqlserver");
         serviceTypeToProfileName.put(AmqpServiceInfo.class, "rabbitmq");
         serviceTypeToProfileName.put(CassandraServiceInfo.class, "cassandra");
+        serviceTypeToProfileName.put(ElasticSearchServiceInfo.class, "elasticsearch");
     }
 
     @Override
@@ -146,7 +148,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
             excludeDataSourceAutoConfiguration(exclude);
             excludeRabbitAutoConfiguration(exclude);
             excludeElasticsearchAutoConfiguration(exclude);
-        } else if (environment.acceptsProfiles("elasticsearch")){
+        } else if (environment.acceptsProfiles("elasticsearch")) {
             excludeMongoAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
             excludeDataSourceAutoConfiguration(exclude);

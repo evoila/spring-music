@@ -18,12 +18,19 @@ public class ElasticsearchConfig {
     @Value("${elasticsearch.port}")
     private int esPort;
 
+    @Value("${elasticsearch.username:''}")
+    private String username = "";
+
+    @Value("${elasticsearch.password:''}")
+    private String password = "";
+
+
     @Bean
     public RestHighLevelClient elasticsearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-                .connectedTo(esHost+":"+esPort)
+                .connectedTo(esHost + ":" + esPort)
+                .withBasicAuth(username, password)
                 .build();
-
         return RestClients.create(clientConfiguration).rest();
     }
 }

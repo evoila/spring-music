@@ -49,12 +49,11 @@ spring:
 ---
 spring:
   profiles: elasticsearch
-  data:
-    elas
-
 elasticsearch:
   host: localhost
   port: 9200
+  username: test
+  password: test
 
 ---
 spring:
