@@ -33,18 +33,29 @@ public class ElasticsearchAlbumRepository implements CrudRepository<Album, Strin
         }
     }
 
+    private void waiting() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public <S extends Album> S save(S entity) {
-        return template.save(entity);
+        S album = template.save(entity);
+        return album;
     }
 
     @Override
     public <S extends Album> Iterable<S> saveAll(Iterable<S> entities) {
-        return template.save(entities);
+        Iterable<S> albums = template.save(entities);
+        return albums;
     }
 
     @Override
     public Optional<Album> findById(String s) {
+        waiting();
         return Optional.ofNullable(template.get(s, Album.class));
     }
 
@@ -55,14 +66,20 @@ public class ElasticsearchAlbumRepository implements CrudRepository<Album, Strin
 
     @Override
     public Iterable<Album> findAll() {
+        /*
+         * Because ES takes some time to save/delete objects we give it some time before firing a GET request.
+         */
+        waiting();
         StringQuery stringQuery = new StringQuery(QueryBuilders.matchAllQuery().toString());
         stringQuery.setMaxResults((int) count());
 
-        return template.search(stringQuery, Album.class).map(SearchHit::getContent).toList();
+        return template.search(stringQuery, Album.class).map(SearchHit::getContent)
+                .toList();
     }
 
     @Override
     public Iterable<Album> findAllById(Iterable<String> strings) {
+        waiting();
         return StreamSupport.stream(strings.spliterator(), false).map(s -> findById(s).get()).collect(Collectors.toList());
     }
 
