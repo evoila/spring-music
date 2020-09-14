@@ -38,14 +38,11 @@ spring:
 spring:
   profiles: rabbitmq
   rabbitmq:
-    host: 127.0.0.1
+    host: localhost
     port: 5672
-    username: guest
-    password: guest
-    javainuse.rabbitmq.exchange: javainuse.exchange
-    javainuse.rabbitmq.queue: javainuse.queue
-    javainuse.rabbitmq.routingkey: javainuse.routingkey
-
+    username: evoila
+    password: evoila
+    virtual-host: evoila
 ---
 spring:
   profiles: elasticsearch

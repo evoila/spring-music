@@ -2,16 +2,18 @@ package org.cloudfoundry.samples.music.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.cloudfoundry.samples.music.config.data.ElasticSearchServiceInfo;
+import org.springframework.boot.actuate.autoconfigure.elasticsearch.ElasticSearchRestHealthContributorAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.cloud.Cloud;
@@ -52,8 +54,6 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         serviceTypeToProfileName.put(OracleServiceInfo.class, "oracle");
         serviceTypeToProfileName.put(SqlServerServiceInfo.class, "sqlserver");
         serviceTypeToProfileName.put(AmqpServiceInfo.class, "rabbitmq");
-        serviceTypeToProfileName.put(CassandraServiceInfo.class, "cassandra");
-        serviceTypeToProfileName.put(ElasticSearchServiceInfo.class, "elasticsearch");
     }
 
     @Override
@@ -204,8 +204,12 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
     }
 
     private void excludeElasticsearchAutoConfiguration(List<String> exclude) {
-        exclude.addAll(Collections.singletonList(
-                ElasticsearchRepositoriesAutoConfiguration.class.getName()
+
+        exclude.addAll(Arrays.asList(
+                ElasticsearchRepositoriesAutoConfiguration.class.getName(),
+                ElasticSearchRestHealthContributorAutoConfiguration.class.getName(),
+                ElasticsearchDataAutoConfiguration.class.getName(),
+                ElasticsearchRestClientAutoConfiguration.class.getName()
         ));
     }
 }
