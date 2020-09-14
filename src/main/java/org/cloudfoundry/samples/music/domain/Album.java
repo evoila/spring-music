@@ -1,33 +1,44 @@
 package org.cloudfoundry.samples.music.domain;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.UUID;
 
 @Table
 @Entity
+@Document(indexName = "album")
 public class Album {
 
+    @org.springframework.data.annotation.Id
     @Id
     @PrimaryKey
     @Column(length=40)
     private String id = UUID.randomUUID().toString();
 
+    @Field(type = FieldType.Text)
     private String title;
+
+    @Field(type = FieldType.Text)
 
     private String artist;
 
+    @Field(type = FieldType.Text)
     private String releaseYear;
 
+    @Field(type = FieldType.Text)
     private String genre;
 
+    @Field(type = FieldType.Integer)
     private int trackCount;
 
+    @Field(type = FieldType.Text)
     private String albumId;
 
     public Album() {

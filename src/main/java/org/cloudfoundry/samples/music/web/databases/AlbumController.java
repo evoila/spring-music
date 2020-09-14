@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/albums")
@@ -39,13 +38,13 @@ public class AlbumController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public Album add(@RequestBody @Valid Album album) {
+    public Album add(@RequestBody Album album) {
         logger.info("Adding album " + album.getId());
         return repository.save(album);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Album update(@RequestBody @Valid Album album) {
+    public Album update(@RequestBody Album album) {
         logger.info("Updating album " + album.getId());
         return repository.save(album);
     }
