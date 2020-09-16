@@ -41,6 +41,9 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
     compile "org.springframework.boot:spring-boot-starter-data-redis"
     compile "org.springframework.boot:spring-boot-starter-amqp"
+
+    compile "org.springframework.kafka:spring-kafka"
+
     compile('org.springframework.boot:spring-boot-starter-data-cassandra')
     compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
     

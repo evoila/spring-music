@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Profile("rabbitmq")
 @Service
-public class RabbitMQSender {
+public class RabbitMQSender implements MessageQueueSender {
 
     private final AmqpTemplate rabbitTemplate;
 
@@ -21,9 +21,10 @@ public class RabbitMQSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+    @Override
     public void send(String test) {
         rabbitTemplate.convertAndSend(exchange, routingkey, test);
         System.out.println("Send msg = " + test);
-
     }
+
 }

@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;
@@ -25,6 +26,7 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.Profiles;
 import org.springframework.core.env.PropertySource;
 import org.springframework.util.StringUtils;
 
@@ -37,23 +39,24 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.cloudfoundry.samples.music.config.Profiles.*;
+
 public class SpringApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     private static final Log logger = LogFactory.getLog(SpringApplicationContextInitializer.class);
 
     private static final Map<Class<? extends ServiceInfo>, String> serviceTypeToProfileName = new HashMap<>();
-    private static final List<String> validLocalProfiles =
-            Arrays.asList("mysql", "postgres", "sqlserver", "oracle", "mongodb",
-                    "redis", "rabbitmq", "cassandra", "elasticsearch");
+    private static final List<String> validLocalProfiles = Arrays.asList(MYSQL, POSTGRES, SQLSERVER, ORACLE, MONGODB,
+                    REDIS, RABBITMQ, CASSANDRA, ELASTICSEARCH, KAFKA);
 
     static {
-        serviceTypeToProfileName.put(MongoServiceInfo.class, "mongodb");
-        serviceTypeToProfileName.put(PostgresqlServiceInfo.class, "postgres");
-        serviceTypeToProfileName.put(MysqlServiceInfo.class, "mysql");
-        serviceTypeToProfileName.put(RedisServiceInfo.class, "redis");
-        serviceTypeToProfileName.put(OracleServiceInfo.class, "oracle");
-        serviceTypeToProfileName.put(SqlServerServiceInfo.class, "sqlserver");
-        serviceTypeToProfileName.put(AmqpServiceInfo.class, "rabbitmq");
+        serviceTypeToProfileName.put(MongoServiceInfo.class, MONGODB);
+        serviceTypeToProfileName.put(PostgresqlServiceInfo.class, POSTGRES);
+        serviceTypeToProfileName.put(MysqlServiceInfo.class, MYSQL);
+        serviceTypeToProfileName.put(RedisServiceInfo.class, REDIS);
+        serviceTypeToProfileName.put(OracleServiceInfo.class, ORACLE);
+        serviceTypeToProfileName.put(SqlServerServiceInfo.class, SQLSERVER);
+        serviceTypeToProfileName.put(AmqpServiceInfo.class, RABBITMQ);
     }
 
     @Override
@@ -124,42 +127,56 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
     private void excludeAutoConfiguration(ConfigurableEnvironment environment) {
         List<String> exclude = new ArrayList<>();
-        if (environment.acceptsProfiles("redis")) {
+
+        if (environment.acceptsProfiles(Profiles.of(REDIS))) {
             excludeDataSourceAutoConfiguration(exclude);
             excludeMongoAutoConfiguration(exclude);
             excludeRabbitAutoConfiguration(exclude);
             excludeCassandraAutoConfiguration(exclude);
             excludeElasticsearchAutoConfiguration(exclude);
-        } else if (environment.acceptsProfiles("mongodb")) {
+            excludeKafkaAutoConfiguration(exclude);
+        } else if (environment.acceptsProfiles(Profiles.of(MONGODB))) {
             excludeDataSourceAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
             excludeRabbitAutoConfiguration(exclude);
             excludeCassandraAutoConfiguration(exclude);
             excludeElasticsearchAutoConfiguration(exclude);
-        } else if (environment.acceptsProfiles("rabbitmq")) {
+            excludeKafkaAutoConfiguration(exclude);
+        } else if (environment.acceptsProfiles(Profiles.of(RABBITMQ))) {
             excludeMongoAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
             excludeDataSourceAutoConfiguration(exclude);
             excludeCassandraAutoConfiguration(exclude);
             excludeElasticsearchAutoConfiguration(exclude);
-        } else if (environment.acceptsProfiles("cassandra")) {
+            excludeKafkaAutoConfiguration(exclude);
+        } else if (environment.acceptsProfiles(Profiles.of(CASSANDRA))) {
             excludeMongoAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
             excludeDataSourceAutoConfiguration(exclude);
             excludeRabbitAutoConfiguration(exclude);
             excludeElasticsearchAutoConfiguration(exclude);
-        } else if (environment.acceptsProfiles("elasticsearch")) {
+            excludeKafkaAutoConfiguration(exclude);
+        } else if (environment.acceptsProfiles(Profiles.of(ELASTICSEARCH))) {
             excludeMongoAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
             excludeDataSourceAutoConfiguration(exclude);
             excludeRabbitAutoConfiguration(exclude);
             excludeCassandraAutoConfiguration(exclude);
+            excludeKafkaAutoConfiguration(exclude);
+        } else if (environment.acceptsProfiles(Profiles.of(KAFKA))) {
+            excludeMongoAutoConfiguration(exclude);
+            excludeRedisAutoConfiguration(exclude);
+            excludeDataSourceAutoConfiguration(exclude);
+            excludeCassandraAutoConfiguration(exclude);
+            excludeElasticsearchAutoConfiguration(exclude);
+            excludeRabbitAutoConfiguration(exclude);
         } else {
             excludeMongoAutoConfiguration(exclude);
             excludeRedisAutoConfiguration(exclude);
             excludeRabbitAutoConfiguration(exclude);
             excludeCassandraAutoConfiguration(exclude);
             excludeElasticsearchAutoConfiguration(exclude);
+            excludeKafkaAutoConfiguration(exclude);
         }
 
         Map<String, Object> properties = Collections.singletonMap("spring.autoconfigure.exclude",
@@ -204,12 +221,17 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
     }
 
     private void excludeElasticsearchAutoConfiguration(List<String> exclude) {
-
         exclude.addAll(Arrays.asList(
                 ElasticsearchRepositoriesAutoConfiguration.class.getName(),
                 ElasticSearchRestHealthContributorAutoConfiguration.class.getName(),
                 ElasticsearchDataAutoConfiguration.class.getName(),
                 ElasticsearchRestClientAutoConfiguration.class.getName()
+        ));
+    }
+
+    private void excludeKafkaAutoConfiguration(List<String> exclude) {
+        exclude.addAll(Collections.singletonList(
+                KafkaAutoConfiguration.class.getName()
         ));
     }
 }
