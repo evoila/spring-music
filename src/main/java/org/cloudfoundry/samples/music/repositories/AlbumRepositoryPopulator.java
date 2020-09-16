@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.init.Jackson2ResourceReader;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,7 +38,9 @@ public class AlbumRepositoryPopulator implements ApplicationListener<Application
         CrudRepository albumRepository;
         if (profiles.contains("rabbitmq")) {
             BeanFactoryUtils.beanOfTypeIncludingAncestors(event.getApplicationContext(), RabbitTemplate.class);
-        }else if (profiles.contains("cassandra")) {
+        }else if (profiles.contains("kafka")){
+            BeanFactoryUtils.beanOfTypeIncludingAncestors(event.getApplicationContext(), KafkaTemplate.class);
+        } else if (profiles.contains("cassandra")) {
             albumRepository =
                     BeanFactoryUtils.beanOfType(event.getApplicationContext(), CrudRepository.class);
             if (albumRepository != null && albumRepository.count() == 0) {

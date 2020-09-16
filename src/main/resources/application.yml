@@ -15,7 +15,7 @@ spring:
     url: "jdbc:mysql://localhost/music"
     driver-class-name: com.mysql.jdbc.Driver
     username:
-    password: 
+    password:
   jpa:
     properties:
       hibernate:
@@ -25,14 +25,37 @@ spring:
 spring:
   profiles: postgres
   datasource:
-    url: "jdbc:postgresql://localhost/music"
+    url: "jdbc:postgresql://localhost/postgres"
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: 
+    password: postgres
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.ProgressDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+
+---
+spring:
+  profiles: kafka
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: group-id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+---
+spring:
+  profiles: redis
+  redis:
+    host: localhost
 
 ---
 spring:
