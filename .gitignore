@@ -4,6 +4,8 @@
 *.iws
 .idea/
 
+.DS_Store
+
 .project
 .metadata
 local.properties
@@ -22,3 +24,4 @@ out/
 /classes/
 
 manifest.yml
+pcf_manifest.yml
