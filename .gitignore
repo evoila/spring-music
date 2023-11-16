@@ -25,3 +25,7 @@ out/
 
 manifest.yml
 pcf_manifest.yml
+
+bin/
+.vscode/
+
